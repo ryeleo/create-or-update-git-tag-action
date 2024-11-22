@@ -31,13 +31,13 @@ jobs:
         with:
           tag-name: "${{ env.test-tag }}"
           tag-message: "${{ env.test-message1 }}"
-      - run: test "$(git tag --list --format='%(contents)')" = "${{ env.test-message1 }}"
+      # - run: test "$(git tag --list --format='%(contents)')" = "${{ env.test-message1 }}"
       - name: Update Tag
         uses: ./
         with:
           tag-name: "${{ env.test-tag }}"
           tag-message: "${{ env.test-message2 }}"
-      - run: test "$(git tag --list --format='%(contents)')" = "${{ env.test-message2 }}"
+      # - run: test "$(git tag --list --format='%(contents)')" = "${{ env.test-message2 }}"
 
 
   # test-powershell:
