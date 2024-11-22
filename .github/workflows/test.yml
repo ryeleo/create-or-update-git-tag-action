@@ -13,6 +13,7 @@ env:
 
 jobs:
   test-bash:
+    permissions: write-all
     strategy:
       fail-fast: false
     runs-on: ubuntu-latest

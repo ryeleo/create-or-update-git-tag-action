@@ -13,8 +13,6 @@ inputs:
   tag-message:
     description: Message to add to the tag.
     required: true
-env:
-  remote: origin
 
 
 runs:
@@ -59,9 +57,8 @@ runs:
       if: steps.existing-message.outputs.result != inputs.tag-message
       run: |
         git tag --force --message="$MESSAGE" "$TAG" $(git rev-parse HEAD)
-        git push --force  "$REMOTE" "$TAG"
+        git push --force origin "$TAG"
       env:
-        REMOTE: ${{ env.remote }}
         TAG: ${{ inputs.tag-name }}
         MESSAGE: ${{ inputs.tag-message }}
       shell: bash
