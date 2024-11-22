@@ -27,13 +27,13 @@ runs:
       id: existing-message
       run: >
         echo "result=$(
-        git tag --list --format='%(contents)' ${{ github.event.inputs.tag-name }}
+        git tag --list --format='%(contents)' "${{ github.event.inputs.tag-name }}"
         )" >> $GITHUB_OUTPUT
       shell: bash
     - run: |
-        echo ${{steps.existing-message.outputs.result}}
-        echo ${{github.event.inputs.tag-message}}
-        echo ${{steps.existing-message.outputs.result != github.event.inputs.tag-message}}
+        echo "${{steps.existing-message.outputs.result}}"
+        echo "${{github.event.inputs.tag-message}}"
+        echo "${{steps.existing-message.outputs.result != github.event.inputs.tag-message}}"
       shell: bash
     - name: Create or Update if required
       if: steps.existing-message.outputs.result != github.event.inputs.tag-message
