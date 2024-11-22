@@ -20,8 +20,16 @@ env:
 runs:
   using: composite
   steps:
+    - name: inputs validation
+      run: |
+        [[ "${{ inputs.tag-name }}" ]] || { echo "tag-name input is empty" ; exit 1; }
+        [[ "${{ inputs.tag-message }}" ]] || { echo "tag-name input is empty" ; exit 1; }
+      shell: bash
     - name: debug
       run: |
+        echo "${{steps.existing-message.outputs.result}}"
+        echo "${{github.event.inputs.tag-message}}"
+        echo "${{steps.existing-message.outputs.result != github.event.inputs.tag-message}}"
         echo "${{steps.existing-message.outputs.result}}"
         echo "${{github.event.inputs.tag-message}}"
         echo "${{steps.existing-message.outputs.result != github.event.inputs.tag-message}}"
