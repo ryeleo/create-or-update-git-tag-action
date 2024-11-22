@@ -50,7 +50,6 @@ runs:
         echo "MSG: $MSG"
         echo "steps.existing-message.outputs.result != inputs.tag-message: ${{steps.existing-message.outputs.result != inputs.tag-message}}"
         echo "steps.existing-message.outputs.result != env.MSG: ${{steps.existing-message.outputs.result != env.MSG }}"
-        echo "steps.existing-message.outputs.result != MSG: ${{steps.existing-message.outputs.result != MSG }}"
       shell: bash
       env:
         TAG: ${{ inputs.tag-name }}
