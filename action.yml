@@ -56,6 +56,8 @@ runs:
       name: Create or Update if required
       if: steps.existing-message.outputs.result != inputs.tag-message
       run: |
+        git config --global user.name 'NS DevOps'
+        git config --global user.email 'nsdevops@uoregon.edu'
         git tag --force --message="$MESSAGE" "$TAG" $(git rev-parse HEAD)
         git push --force origin "$TAG"
       env:
