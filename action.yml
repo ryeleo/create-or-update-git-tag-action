@@ -30,6 +30,11 @@ runs:
         git tag --list --format='%(contents)' ${{ inputs.tag-name }}
         )" >> $GITHUB_OUTPUT
       shell: bash
+    - run: |
+        echo ${{steps.existing-message.outputs.result != inputs.tag-message}}
+        echo ${{inputs.tag-message}}
+        echo ${{steps.existing-message.outputs.result != inputs.tag-message}}
+      shell: bash
     - name: Create or Update if required
       if: steps.existing-message.outputs.result != inputs.tag-message
       run: |
