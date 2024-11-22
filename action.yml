@@ -25,7 +25,8 @@ runs:
       run: |
         [[ "${{ inputs.tag-name }}" ]] || echo "tag-name input is empty"
         [[ "${{ inputs.tag-message }}" ]] || echo "tag-message input is empty"
-        [[ "${{ inputs.tag-name }}" ]] || [[ "${{ inputs.tag-message }}" ]] || exit 1
+        [[ "${{ inputs.tag-name }}" ]] || exit 1
+        [[ "${{ inputs.tag-message }}" ]] || exit 1
       shell: bash
     -
       name: Get all tags within repository
