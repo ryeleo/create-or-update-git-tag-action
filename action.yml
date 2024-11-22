@@ -20,35 +20,15 @@ env:
 runs:
   using: composite
   steps:
-    - name: inputs validation
+    -
+      name: inputs validation
       run: |
         [[ "${{ inputs.tag-name }}" ]] || echo "tag-name input is empty"
         [[ "${{ inputs.tag-message }}" ]] || echo "tag-message input is empty"
         [[ "${{ inputs.tag-name }}" ]] || [[ "${{ inputs.tag-message }}" ]] || exit 1
       shell: bash
-    - name: debug
-      run: |
-        echo "${{steps.existing-message.outputs.result}}"
-        echo "${{github.event.inputs.tag-message}}"
-        echo "${{steps.existing-message.outputs.result != github.event.inputs.tag-message}}"
-        echo "${{steps.existing-message.outputs.result}}"
-        echo "${{github.event.inputs.tag-message}}"
-        echo "${{steps.existing-message.outputs.result != github.event.inputs.tag-message}}"
-        echo $TAG1
-        echo $TAG2
-        echo $TAG3
-        echo $MSG1
-        echo $MSG2
-        echo $MSG3
-      shell: bash
-      env:
-        TAG1: ${{ inputs.tag-name }}
-        TAG2: ${{ github.events.inputs.tag-name }}
-        TAG3: ${{ env.tag-name }}
-        MSG1: ${{ inputs.tag-message }}
-        MSG2: ${{ github.events.tag-message }}
-        MSG3: ${{ env.tag-message }}
-    - name: Get all tags within repository
+    -
+      name: Get all tags within repository
       run: git fetch --tags --prune-tags
       shell: bash
     - name: Get existing tag message
@@ -60,7 +40,8 @@ runs:
       shell: bash
       env:
         TAG: ${{ inputs.tag-name }}
-    - name: debug
+    -
+      name: debug
       run: |
         echo "${{steps.existing-message.outputs.result}}"
         echo "${{github.event.inputs.tag-message}}"
@@ -79,8 +60,9 @@ runs:
         MSG1: ${{ inputs.tag-message }}
         MSG2: ${{ github.events.tag-message }}
         MSG3: ${{ env.tag-message }}
-    - name: Create or Update if required
-      if: steps.existing-message.outputs.result != github.event.inputs.tag-message
+    -
+      name: Create or Update if required
+      if: steps.existing-message.outputs.result != inputs.tag-message
       run: |
         git tag --force --message="$MESSAGE" "$TAG" $(git rev-parse HEAD)
         git push --force  "$REMOTE" "$TAG"
