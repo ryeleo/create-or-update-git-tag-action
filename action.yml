@@ -44,23 +44,15 @@ runs:
     -
       name: debug
       run: |
-        echo "${{steps.existing-message.outputs.result}}"
-        echo "${{github.event.inputs.tag-message}}"
-        echo "${{steps.existing-message.outputs.result != github.event.inputs.tag-message}}"
-        echo $TAG1
-        echo $TAG2
-        echo $TAG3
-        echo $MSG1
-        echo $MSG2
-        echo $MSG3
+        echo "steps.existing-message.outputs.result: ${{steps.existing-message.outputs.result}}"
+        echo "inputs.tag-message: ${{ inputs.tag-message }}"
+        echo "steps.existing-message.outputs.result != github.event.inputs.tag-message: ${{steps.existing-message.outputs.result != github.event.inputs.tag-message}}"
+        echo "TAG1: $TAG1"
+        echo "MSG1: $MSG1"
       shell: bash
       env:
         TAG1: ${{ inputs.tag-name }}
-        TAG2: ${{ github.events.inputs.tag-name }}
-        TAG3: ${{ env.tag-name }}
         MSG1: ${{ inputs.tag-message }}
-        MSG2: ${{ github.events.tag-message }}
-        MSG3: ${{ env.tag-message }}
     -
       name: Create or Update if required
       if: steps.existing-message.outputs.result != inputs.tag-message
