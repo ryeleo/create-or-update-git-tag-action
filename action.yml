@@ -27,9 +27,11 @@ runs:
       id: existing-message
       run: >
         echo "result=$(
-        git tag --list --format='%(contents)' "${{ github.event.inputs.tag-name }}"
+        git tag --list --format='%(contents)' "$TAG"
         )" >> $GITHUB_OUTPUT
       shell: bash
+      env:
+        TAG: ${{ github.event.inputs.tag-name }}
     - run: |
         echo "${{steps.existing-message.outputs.result}}"
         echo "${{github.event.inputs.tag-message}}"
