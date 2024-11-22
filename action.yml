@@ -27,21 +27,21 @@ runs:
       id: existing-message
       run: >
         echo "result=$(
-        git tag --list --format='%(contents)' ${{ inputs.tag-name }}
+        git tag --list --format='%(contents)' ${{ github.event.inputs.tag-name }}
         )" >> $GITHUB_OUTPUT
       shell: bash
     - run: |
-        echo ${{steps.existing-message.outputs.result != inputs.tag-message}}
-        echo ${{inputs.tag-message}}
-        echo ${{steps.existing-message.outputs.result != inputs.tag-message}}
+        echo ${{steps.existing-message.outputs.result}}
+        echo ${{github.event.inputs.tag-message}}
+        echo ${{steps.existing-message.outputs.result != github.event.inputs.tag-message}}
       shell: bash
     - name: Create or Update if required
-      if: steps.existing-message.outputs.result != inputs.tag-message
+      if: steps.existing-message.outputs.result != github.event.inputs.tag-message
       run: |
         git tag --force --message="$MESSAGE" "$TAG" $(git rev-parse HEAD)
         git push --force  "$REMOTE" "$TAG"
       env:
         REMOTE: ${{ env.remote }}
-        TAG: ${{ inputs.tag-name }}
-        MESSAGE: ${{ inputs.tag-message }}
+        TAG: ${{ github.event.inputs.tag-name }}
+        MESSAGE: ${{ github.event.inputs.tag-message }}
       shell: bash
