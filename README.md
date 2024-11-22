@@ -1,76 +1,50 @@
 [![Test](https://github.com/snow-actions/composite-action-template/actions/workflows/test.yml/badge.svg)](https://github.com/snow-actions/composite-action-template/actions/workflows/test.yml)
 
-# Create a Composite Action
+# Composite Action `create-or-update-git-tag-action`
 
-Click the `Use this template` to bootstrap the creation of a [composite action](https://docs.github.com/en/actions/creating-actions/creating-a-composite-action).:rocket:
+Create or update a git tag.
+Only update the git tag if the message of the git tag is changed.
 
-This template includes tests, a validation workflow and versioning guidance.
+This is useful if you are trying to store some data within a git tag message.
 
-Learn how to use this template at [Wiki](https://github.com/snow-actions/composite-action-template/wiki).
+NOTE: Will force update the git tag if an update is required.
 
 ## Usage
 
-### Basic
-
 ```yml
 steps:
-  - uses: snow-actions/composite-action-template@v1.0.0
-```
-
-### Optional
-
-```yml
-steps:
-  - uses: snow-actions/composite-action-template@v1.0.0
+  - uses: actions/checkout@v4
+  - uses: ryeleo/create-or-update-git-tag-action@main
     with:
-      who-to-greet: Your name
+      tag-name: tag-name
+      tag-message: my message
 ```
-
-## Environment variables
-
-| Name | Description | Default | Required |
-| - | - | - | - |
-| `WHO_TO_GREET` | Who to greet | `World` | no |
 
 ## Inputs
 
 See [action.yml](action.yml)
 
-| Name | Description | Default | Required |
+| Name | Description  | Required |
 | - | - | - | - |
-| `who-to-greet` | Who to greet | `World` | yes |
-
-## Outputs
-
-See [action.yml](action.yml)
-
-| Name | Description |
-| - | - |
-| `greet` | The word we greeted you |
+| `tag-name` | Tag to be created or updated.  | yes |
+| `tag-message` | Message to be set for the tag. | yes |
 
 ## Supported
 
 ### Runners
 
+<!-- TODO
 - `ubuntu-*`
 - `windows-*`
 - `macos-*`
+-->
 - `self-hosted`
 
 ### Events
 
 - Any
-<!--
-- `push`
-- `pull_request`
--->
 
 ## Dependencies
 
 - Bash
-- [actions/cache](https://github.com/actions/cache) >= 3.0.0
-- [GitHub CLI](https://cli.github.com/) >= 2.6.0
-
-## Contributing
-
-Welcome.
+- [actions/checkout](https://github.com/actions/checkout)

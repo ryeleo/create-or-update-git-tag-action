@@ -7,6 +7,11 @@ on:
   pull_request:
   workflow_dispatch:
 
+env:
+  test-message: "  AA BB CC DEADBEEF!!  "
+  test-tag: test-tag/${{ github.run_id }}-${{ github.run_attempt }}
+
+
 jobs:
   runners:
     runs-on: ubuntu-latest
@@ -16,7 +21,7 @@ jobs:
     steps:
       - id: list
         uses: snow-actions/list-github-hosted-runners@v1.0.0
-  
+
   test-bash:
     needs: [ runners ]
     strategy:
@@ -32,23 +37,12 @@ jobs:
         shell: bash
 
     steps:
-      - uses: actions/checkout@v3
-
-      - id: without-parameters
-        uses: ./
-      - run: test "${GREET}" = "Hello World"
-        env:
-          GREET: ${{ steps.without-parameters.outputs.greet }}
-      - run: test "$(cat greet.txt)" = "Hello World"
-
-      - id: with-parameters
-        uses: ./
+      - uses: actions/checkout@v4
+      - uses: ./action.yml
         with:
-          who-to-greet: composite action
-      - run: test "${GREET}" = "Hello composite action"
-        env:
-          GREET: ${{ steps.with-parameters.outputs.greet }}
-      - run: test "$(cat greet.txt)" = "Hello composite action"
+          tag-name: ${{ github.env.test-tag }}
+          tag-message: ${{ github.env.test-message }}
+      - run: test "$(git tag --list --format='%(contents)')" = "${{ github.env.test-message }}"
 
   test-powershell:
     needs: [ runners ]
@@ -60,23 +54,12 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - uses: actions/checkout@v3
-
-      - id: without-parameters
-        uses: ./
-      - run: test "${env:GREET}" = "Hello World"
-        env:
-          GREET: ${{ steps.without-parameters.outputs.greet }}
-      - run: test "$(cat greet.txt)" = "Hello World"
-
-      - id: with-parameters
-        uses: ./
+      - uses: actions/checkout@v4
+      - uses: ./action.yml
         with:
-          who-to-greet: composite action
-      - run: test "${env:GREET}" = "Hello composite action"
-        env:
-          GREET: ${{ steps.with-parameters.outputs.greet }}
-      - run: test "$(cat greet.txt)" = "Hello composite action"
+          tag-name: ${{ github.env.test-tag }}
+          tag-message: ${{ github.env.test-message }}
+      - run: test "$(git tag --list --format='%(contents)')" = "${{ github.env.test-message }}"
 
   # Make up matrix statuses into a status for status checks in branch protection rules
   test-passing:

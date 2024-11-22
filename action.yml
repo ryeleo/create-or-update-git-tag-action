@@ -1,26 +1,42 @@
-name: Composite Action Template
-description: Get started with Composite actions
-branding:
-  icon: award
-  color: green
+name: Create or Update a Git Tag
+description: >
+  Create or update a git tag.
+  Only update the git tag if the message of the git tag is changed.
+
+  This is useful if you are trying to store some data within a git tag message.
+
+  NOTE: Will force update the git tag if an update is required.
 inputs:
-  who-to-greet:
-    description: Who to greet
+  tag-name:
+    description: Git tag to create or update.
     required: true
-    default: World
-outputs:
-  greet:
-    description: The word we greeted you
-    value: ${{ steps.greet.outputs.word }}
+  tag-message:
+    description: Message to add to the tag.
+    required: true
+env:
+  remote: origin
+
+
 runs:
   using: composite
   steps:
-    - id: greet
+    - name: Get all tags within repository
+      run: git fetch --tags --prune-tags
+      shell: bash
+    - name: Get existing tag message
+      id: existing-message
+      run: >
+        echo "result=$(
+        git tag --list --format='%(contents)' ${{ inputs.tag-name }}
+        )" >> $GITHUB_OUTPUT
+    - name: Create or Update if required
+      if: steps.existing-message.outputs.result != inputs.tag-message
+      shell: bash
       run: |
-        GREET="Hello ${WHO}"
-        echo "${GREET}"
-        echo "${GREET}" > greet.txt
-        echo "word=${GREET}" >> $GITHUB_OUTPUT
+        git tag --force --message="$MESSAGE" "$TAG" $(git rev-parse HEAD)
+        git push --force  "$REMOTE" "$TAG"
       shell: bash
       env:
-        WHO: ${{ inputs.who-to-greet }}
+        REMOTE: ${{ env.remote }}
+        TAG: ${{ inputs.tag-name }}
+        MESSAGE: ${{ inputs.tag-message }}
