@@ -24,7 +24,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: ./action.yml
+      - uses: ./
         with:
           tag-name: ${{ github.env.test-tag }}
           tag-message: ${{ github.env.test-message }}
