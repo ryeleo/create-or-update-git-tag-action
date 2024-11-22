@@ -24,9 +24,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./
-        # with:
-        #   tag-name: "${{ env.test-tag }}"
-        #   tag-message: "${{ env.test-message }}"
+        with:
+          # tag-name: "${{ env.test-tag }}"
+          tag-message: "${{ env.test-message }}"
       - run: test "$(git tag --list --format='%(contents)')" = "${{ github.env.test-message }}"
 
   # test-powershell:
