@@ -22,8 +22,9 @@ runs:
   steps:
     - name: inputs validation
       run: |
-        [[ "${{ inputs.tag-name }}" ]] || { echo "tag-name input is empty" ; exit 1; }
-        [[ "${{ inputs.tag-message }}" ]] || { echo "tag-name input is empty" ; exit 1; }
+        [[ "${{ inputs.tag-name }}" ]] || echo "tag-name input is empty"
+        [[ "${{ inputs.tag-message }}" ]] || echo "tag-message input is empty"
+        [[ "${{ inputs.tag-name }}" ]] || [[ "${{ inputs.tag-message }}" ]] || exit 1
       shell: bash
     - name: debug
       run: |
