@@ -13,16 +13,18 @@ inputs:
   tag-message:
     description: Message to add to the tag.
     required: true
-# env:
-#   remote: origin
+env:
+  remote: origin
 
 
 runs:
   using: composite
+  defaults:
+    run:
+      shell: bash
   steps:
     - name: Get all tags within repository
       run: git fetch --tags --prune-tags
-      shell: bash
     - name: Get existing tag message
       id: existing-message
       run: >
@@ -31,11 +33,9 @@ runs:
         )" >> $GITHUB_OUTPUT
     - name: Create or Update if required
       if: steps.existing-message.outputs.result != inputs.tag-message
-      shell: bash
       run: |
         git tag --force --message="$MESSAGE" "$TAG" $(git rev-parse HEAD)
         git push --force  "$REMOTE" "$TAG"
-      shell: bash
       env:
         REMOTE: ${{ env.remote }}
         TAG: ${{ inputs.tag-name }}
