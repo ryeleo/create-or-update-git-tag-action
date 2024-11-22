@@ -20,6 +20,25 @@ env:
 runs:
   using: composite
   steps:
+    - name: debug
+      run: |
+        echo "${{steps.existing-message.outputs.result}}"
+        echo "${{github.event.inputs.tag-message}}"
+        echo "${{steps.existing-message.outputs.result != github.event.inputs.tag-message}}"
+        echo $TAG1
+        echo $TAG2
+        echo $TAG3
+        echo $MSG1
+        echo $MSG2
+        echo $MSG3
+      shell: bash
+      env:
+        TAG1: ${{ inputs.tag-name }}
+        TAG2: ${{ github.events.inputs.tag-name }}
+        TAG3: ${{ env.tag-name }}
+        MSG1: ${{ inputs.tag-message }}
+        MSG2: ${{ github.events.tag-message }}
+        MSG3: ${{ env.tag-message }}
     - name: Get all tags within repository
       run: git fetch --tags --prune-tags
       shell: bash
@@ -27,16 +46,30 @@ runs:
       id: existing-message
       run: >
         echo "result=$(
-        git tag --list --format='%(contents)' "$TAG"
+        git tag --list --format='%(contents)' $TAG
         )" >> $GITHUB_OUTPUT
       shell: bash
       env:
-        TAG: ${{ github.event.inputs.tag-name }}
-    - run: |
+        TAG: ${{ inputs.tag-name }}
+    - name: debug
+      run: |
         echo "${{steps.existing-message.outputs.result}}"
         echo "${{github.event.inputs.tag-message}}"
         echo "${{steps.existing-message.outputs.result != github.event.inputs.tag-message}}"
+        echo $TAG1
+        echo $TAG2
+        echo $TAG3
+        echo $MSG1
+        echo $MSG2
+        echo $MSG3
       shell: bash
+      env:
+        TAG1: ${{ inputs.tag-name }}
+        TAG2: ${{ github.events.inputs.tag-name }}
+        TAG3: ${{ env.tag-name }}
+        MSG1: ${{ inputs.tag-message }}
+        MSG2: ${{ github.events.tag-message }}
+        MSG3: ${{ env.tag-message }}
     - name: Create or Update if required
       if: steps.existing-message.outputs.result != github.event.inputs.tag-message
       run: |
