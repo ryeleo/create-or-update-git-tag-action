@@ -7,7 +7,7 @@ Only update the git tag if the message of the git tag is changed.
 
 This is useful if you are trying to store some data within a git tag message.
 
-NOTE: Will force update the git tag if an update is required.
+> **⚠ NOTE:** Will force update the git tag if an update is required.
 
 ## Usage
 

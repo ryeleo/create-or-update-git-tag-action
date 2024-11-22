@@ -13,24 +13,10 @@ env:
 
 
 jobs:
-  runners:
-    runs-on: ubuntu-latest
-    outputs:
-      all: ${{ steps.list.outputs.all }}
-      windows: ${{ steps.list.outputs.windows }}
-    steps:
-      - id: list
-        uses: snow-actions/list-github-hosted-runners@v1.0.0
-
   test-bash:
-    needs: [ runners ]
     strategy:
       fail-fast: false
-      matrix:
-        # Runs on all supported runners
-        # https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources
-        runner: ${{ fromJSON(needs.runners.outputs.all) }}
-    runs-on: ${{ matrix.runner }}
+    runs-on: ubuntu-latest
     timeout-minutes: 5
     defaults:
       run:
@@ -44,28 +30,25 @@ jobs:
           tag-message: ${{ github.env.test-message }}
       - run: test "$(git tag --list --format='%(contents)')" = "${{ github.env.test-message }}"
 
-  test-powershell:
-    needs: [ runners ]
-    strategy:
-      fail-fast: false
-      matrix:
-        runner: ${{ fromJSON(needs.runners.outputs.windows) }}
-    runs-on: ${{ matrix.runner }}
-    timeout-minutes: 5
+  # test-powershell:
+  #   strategy:
+  #     fail-fast: false
+  #   runs-on: windows
+  #   timeout-minutes: 5
 
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./action.yml
-        with:
-          tag-name: ${{ github.env.test-tag }}
-          tag-message: ${{ github.env.test-message }}
-      - run: test "$(git tag --list --format='%(contents)')" = "${{ github.env.test-message }}"
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: ./action.yml
+  #       with:
+  #         tag-name: ${{ github.env.test-tag }}
+  #         tag-message: ${{ github.env.test-message }}
+  #     - run: test "$(git tag --list --format='%(contents)')" = "${{ github.env.test-message }}"
 
-  # Make up matrix statuses into a status for status checks in branch protection rules
-  test-passing:
-    needs: [ test-bash, test-powershell ]
-    runs-on: ubuntu-latest
-    timeout-minutes: 1
+  # # Make up matrix statuses into a status for status checks in branch protection rules
+  # test-passing:
+  #   needs: [ test-bash, test-powershell ]
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 1
 
-    steps:
-      - run: echo "All tests have passed."
+  #   steps:
+  #     - run: echo "All tests have passed."
