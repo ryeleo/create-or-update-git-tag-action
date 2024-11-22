@@ -19,18 +19,17 @@ env:
 
 runs:
   using: composite
-  defaults:
-    run:
-      shell: bash
   steps:
     - name: Get all tags within repository
       run: git fetch --tags --prune-tags
+      shell: bash
     - name: Get existing tag message
       id: existing-message
       run: >
         echo "result=$(
         git tag --list --format='%(contents)' ${{ inputs.tag-name }}
         )" >> $GITHUB_OUTPUT
+      shell: bash
     - name: Create or Update if required
       if: steps.existing-message.outputs.result != inputs.tag-message
       run: |
@@ -40,3 +39,4 @@ runs:
         REMOTE: ${{ env.remote }}
         TAG: ${{ inputs.tag-name }}
         MESSAGE: ${{ inputs.tag-message }}
+      shell: bash
