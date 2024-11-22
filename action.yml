@@ -13,8 +13,8 @@ inputs:
   tag-message:
     description: Message to add to the tag.
     required: true
-env:
-  remote: origin
+# env:
+#   remote: origin
 
 
 runs:
