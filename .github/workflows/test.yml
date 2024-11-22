@@ -8,7 +8,8 @@ on:
   workflow_dispatch:
 
 env:
-  test-message: "  AA BB CC DEADBEEF!!  "
+  test-message1: "  AA BB CC DEADBEEF!!  "
+  test-message2: "  FULL Test Success!  "
   test-tag: test-tag/${{ github.run_id }}-${{ github.run_attempt }}
 
 jobs:
@@ -24,11 +25,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: ./
+      -
+        name: Create Tag
+        uses: ./
         with:
           tag-name: "${{ env.test-tag }}"
-          tag-message: "${{ env.test-message }}"
-      - run: test "$(git tag --list --format='%(contents)')" = "${{ github.env.test-message }}"
+          tag-message: "${{ env.test-message1 }}"
+      - run: test "$(git tag --list --format='%(contents)')" = "${{ env.test-message1 }}"
+      - name: Update Tag
+        uses: ./
+        with:
+          tag-name: "${{ env.test-tag }}"
+          tag-message: "${{ env.test-message2 }}"
+      - run: test "$(git tag --list --format='%(contents)')" = "${{ env.test-message2 }}"
+
 
   # test-powershell:
   #   strategy:
