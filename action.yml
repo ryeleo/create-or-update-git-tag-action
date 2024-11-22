@@ -46,15 +46,15 @@ runs:
       run: |
         echo "steps.existing-message.outputs.result: ${{steps.existing-message.outputs.result}}"
         echo "inputs.tag-message: ${{ inputs.tag-message }}"
-        echo "TAG1: $TAG1"
-        echo "MSG1: $MSG1"
+        echo "TAG: $TAG"
+        echo "MSG: $MSG"
         echo "steps.existing-message.outputs.result != inputs.tag-message: ${{steps.existing-message.outputs.result != inputs.tag-message}}"
-        echo "steps.existing-message.outputs.result != env.MSG1: ${{steps.existing-message.outputs.result != env.MSG1 }}"
-        echo "steps.existing-message.outputs.result != MSG1: ${{steps.existing-message.outputs.result != MSG1 }}"
+        echo "steps.existing-message.outputs.result != env.MSG: ${{steps.existing-message.outputs.result != env.MSG }}"
+        echo "steps.existing-message.outputs.result != MSG: ${{steps.existing-message.outputs.result != MSG }}"
       shell: bash
       env:
-        TAG1: ${{ inputs.tag-name }}
-        MSG1: ${{ inputs.tag-message }}
+        TAG: ${{ inputs.tag-name }}
+        MSG: ${{ inputs.tag-message }}
     -
       name: Create or Update if required
       if: steps.existing-message.outputs.result != inputs.tag-message
@@ -63,6 +63,6 @@ runs:
         git push --force  "$REMOTE" "$TAG"
       env:
         REMOTE: ${{ env.remote }}
-        TAG: ${{ github.event.inputs.tag-name }}
-        MESSAGE: ${{ github.event.inputs.tag-message }}
+        TAG: ${{ inputs.tag-name }}
+        MESSAGE: ${{ inputs.tag-message }}
       shell: bash
