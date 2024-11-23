@@ -43,8 +43,8 @@ jobs:
       # TODO How to test 'not updating tag.'..?
       - name: Add new empty Commit
         run: |
-          git config --global user.name '$(git log -1 --pretty=format:'%an')'
-          git config --global user.email '$(git log -1 --pretty=format:'%ae')'
+          git config --global user.name "$(git log -1 --pretty=format:'%an')"
+          git config --global user.email "$(git log -1 --pretty=format:'%ae')"
           git commit --allow-empty -m 'Commit for testing ""'
 
       - name: Update Tag 2 (should do nothing, since message is the same)

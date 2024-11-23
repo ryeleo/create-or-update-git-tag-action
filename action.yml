@@ -56,8 +56,8 @@ runs:
       name: Create or Update if required
       if: steps.existing-message.outputs.result != inputs.tag-message
       run: |
-        git config --global user.name '$(git log -1 --pretty=format:'%an')'
-        git config --global user.email '$(git log -1 --pretty=format:'%ae')'
+        git config --global user.name "$(git log -1 --pretty=format:'%an')"
+        git config --global user.email "$(git log -1 --pretty=format:'%ae')"
         git tag --force --message="$MESSAGE" "$TAG" $(git rev-parse HEAD)
         git push --force origin "$TAG"
       env:
